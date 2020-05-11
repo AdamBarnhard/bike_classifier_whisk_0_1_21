@@ -1,0 +1,2 @@
+include requirements.txt
+graft src/bike_classifier_whisk_0_1_21/artifacts/
