@@ -40,7 +40,7 @@ class Model:
         """
         # The model input should include a list of image paths
         # This model currently supports only one input, so select first item in list
-        # TODO: Add support for multiple models
+        # TODO: Add support for multiple images
         data = data[0]
 
         # check if input is a URL, if so download the file and save that path
