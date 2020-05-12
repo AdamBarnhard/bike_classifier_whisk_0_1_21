@@ -1,6 +1,16 @@
 import pickle
 from whisk.model_stub import ModelStub
 import bike_classifier_whisk_0_1_21
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+from tensorflow.keras.preprocessing.image import img_to_array
+from tensorflow.keras.preprocessing.image import load_img
+from tensorflow.keras.models import load_model
+import numpy as np
+import argparse
+import cv2
+import os
+from urllib.request import urlretrieve
+import validators
 
 class Model:
     """
@@ -22,13 +32,28 @@ class Model:
             with open(bike_classifier_whisk_0_1_21.project.artifacts_dir / 'tokenizer.pickle', 'rb') as file:
                 self.tokenizer = pickle.load(file)
         """
-        # REPLACE ME - add your loading logic
-        with open(bike_classifier_whisk_0_1_21.project.artifacts_dir / "model.pkl", 'rb') as file:
-            self.model = pickle.load(file)
+
+        self.model = load_model(bike_classifier_whisk_0_1_21.project.artifacts_dir / 'bike_classification_model.model')
 
     def predict(self,data):
         """
         Returns model predictions.
         """
-        # Add any required pre/post-processing steps here.
-        return self.model.predict(data)
+        # check if input is a URL, if so download the file and save that path
+        # else, try to import the file as a path
+        if validators.url(str(data)):
+            image_path = 'image'
+            urlretrieve(data, image_path)
+        else:
+            image_path = data
+
+        # Process image file for modeling
+        image = load_img(image_path, target_size=(224, 224))
+        image = img_to_array(image)
+        image = preprocess_input(image)
+        image = np.array(image, dtype="float32")
+        image = np.expand_dims(image, axis=0)
+        
+        # use image to create prediction
+        [response] = self.model.predict(image)
+        return 'Mountain: ' + str(response[0]) + ', Road: ' + str(response[1])

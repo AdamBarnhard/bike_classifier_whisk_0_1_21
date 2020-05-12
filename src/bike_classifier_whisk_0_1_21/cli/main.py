@@ -14,7 +14,7 @@ def predict(x):
     Example usage: bike_classifier_whisk_0_1_21 predict [[1,2],[3,4]]
     """
     model = Model()
-    x_parsed = json.loads(x)
+    x_parsed = str(x)
     res = model.predict(x_parsed)
     click.echo(res)
 
