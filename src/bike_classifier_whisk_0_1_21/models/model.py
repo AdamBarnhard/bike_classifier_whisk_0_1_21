@@ -7,7 +7,6 @@ from tensorflow.keras.preprocessing.image import load_img
 from tensorflow.keras.models import load_model
 import numpy as np
 import argparse
-import cv2
 import os
 from urllib.request import urlretrieve
 import validators
