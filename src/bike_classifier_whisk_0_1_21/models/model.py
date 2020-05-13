@@ -38,6 +38,11 @@ class Model:
         """
         Returns model predictions.
         """
+        # The model input should include a list of image paths
+        # This model currently supports only one input, so select first item in list
+        # TODO: Add support for multiple images
+        data = data[0]
+
         # check if input is a URL, if so download the file and save that path
         # else, try to import the file as a path
         if validators.url(str(data)):
